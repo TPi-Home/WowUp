@@ -371,7 +371,7 @@
       },
       "TITLE": "WowUp Permissions Setup",
       "WAGO": {
-        "DESCRIPTION": "Enabled the Wago.io addon provider, this will display an ad required to use their service.\nThe ads directly benefit the authors of your favorite addons!",
+        "DESCRIPTION": "Wago.io 애드온 제공자를 사용하려면 Wago 액세스 키가 필요합니다. 애드온 설정에 키를 입력하세요.",
         "TOGGLE_LABEL": "Enable Wago.io Provider"
       }
     },
@@ -553,7 +553,7 @@
         },
         "TITLE": "애드온",
         "WAGO_ACCESS_KEY": {
-          "MESSAGE": "Use the Wago provider without seeing advertisements. <a href=\"https://addons.wago.io/patreon\">Learn More</a>",
+          "MESSAGE": "Wago 제공자를 사용하려면 개인 액세스 키를 입력하세요. <a href=\"https://addons.wago.io/patreon\">Learn More</a>",
           "PLACEHOLDER": "Access Key",
           "TITLE": "Wago Access Key"
         }

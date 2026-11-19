@@ -3,7 +3,6 @@ import * as Store from "electron-store";
 import * as log from "electron-log/main";
 
 import { AddonController } from "./addon.controller";
-import { WagoAdsController } from "./wago-ads.controller";
 import { IpcController } from "./ipc-controller";
 import { MetricsController } from "./metrics/metrics.controller";
 import { AddonScanController } from "./scan/addon-scan.controller";
@@ -11,8 +10,6 @@ import { TocController } from "./toc/toc.controller";
 import { WarcraftController } from "./warcraft/warcraft.controller";
 import { WarcraftInstallationController } from "./warcraft/warcraft-installation.controller";
 import { TocService } from "../services/toc/toc.service";
-import { WagoAdViewService } from "../services/ads/wago-ad-view.service";
-import { WagoCmpWindowService } from "../services/ads/wago-cmp-window.service";
 import { ProcessMetricsService } from "../services/metrics/process-metrics";
 import { getWebContentsLabels } from "../services/metrics/web-contents-labels";
 import { sampleWindow } from "../services/metrics/window-sample";
@@ -70,13 +67,6 @@ export function registerControllers(deps: ControllerDeps): void {
     // can be held against the wago ones.
     new MetricsController(metricsService),
   ];
-
-  // The overwolf flavor renders its ad through the overwolf sdk.
-  if (AppEnv.buildFlavor === "wago") {
-    const adView = new WagoAdViewService(deps.window);
-    const cmpWindow = new WagoCmpWindowService(deps.window, (visible) => adView.setCmpOpen(visible));
-    controllers.push(new WagoAdsController(deps.window, adView, cmpWindow));
-  }
 
   for (const controller of controllers) {
     controller.register();

@@ -1,7 +1,6 @@
 import { ChangeDetectorRef, Component } from "@angular/core";
 import { AddonService } from "../../../services/addons/addon.service";
 import { MetricsApiService } from "../../../services/api/metrics-api.service";
-import { SessionService } from "../../../services/session/session.service";
 import { WowUpService } from "../../../services/wowup/wowup.service";
 import { describeWindow, MetricsSnapshot, ProcessSample } from "../../../../common/models/process-metrics";
 
@@ -19,7 +18,6 @@ export class OptionsDebugSectionComponent {
     private _cdRef: ChangeDetectorRef,
     private _addonService: AddonService,
     private _wowupService: WowUpService,
-    private _sessionService: SessionService,
     private _metricsApiService: MetricsApiService,
   ) {}
 
@@ -54,10 +52,6 @@ export class OptionsDebugSectionComponent {
       this.dumpingDebugData = false;
       this._cdRef.detectChanges();
     }
-  }
-
-  public onDebugAdFrame(): void {
-    this._sessionService.debugAdFrame$.next(true);
   }
 
   public async onLogProcessMetrics(): Promise<void> {

@@ -1,5 +1,5 @@
 import { TranslateMessageFormatCompiler } from "ngx-translate-messageformat-compiler";
-import { BehaviorSubject, Observable, Subject } from "rxjs";
+import { Observable, Subject } from "rxjs";
 
 import { OverlayContainer, OverlayModule } from "@angular/cdk/overlay";
 import { HttpClient, HttpClientModule } from "@angular/common/http";
@@ -55,13 +55,7 @@ describe("AppComponent", () => {
       syncError$: new Subject(),
     });
 
-    addonProviderService = jasmine.createSpyObj(
-      "AddonProviderFactory",
-      {
-        getAdRequiredProviders: () => [],
-      },
-      {},
-    );
+    addonProviderService = jasmine.createSpyObj("AddonProviderFactory", {}, {});
 
     warcraftInstallationService = jasmine.createSpyObj("WarcraftInstallationService", [""], {
       wowInstallations$: new Subject(),
@@ -81,9 +75,7 @@ describe("AppComponent", () => {
     wowUpServiceSpy = jasmine.createSpyObj("WowUpService", [""], {
       preferenceChange$: new Subject<PreferenceChange>().asObservable(),
     });
-    sessionServiceSpy = jasmine.createSpyObj("SessionService", ["autoUpdateComplete"], {
-      adSpace$: new BehaviorSubject(false),
-    });
+    sessionServiceSpy = jasmine.createSpyObj("SessionService", ["autoUpdateComplete"], {});
     fileServiceSpy = jasmine.createSpyObj("FileService", [""]);
     analyticsServiceSpy = jasmine.createSpyObj("AnalyticsService", ["trackStartup"]);
     preferenceStorageSpy = jasmine.createSpyObj("PreferenceStorageService", ["get"], {});

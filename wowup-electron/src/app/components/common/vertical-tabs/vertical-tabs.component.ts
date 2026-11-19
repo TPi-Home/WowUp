@@ -1,7 +1,7 @@
-import { BehaviorSubject, combineLatest, Observable, Subject } from "rxjs";
-import { map, takeUntil } from "rxjs/operators";
+import { BehaviorSubject, combineLatest, Observable } from "rxjs";
+import { map } from "rxjs/operators";
 
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 
 import {
   FEATURE_ACCOUNTS_ENABLED,
@@ -17,13 +17,7 @@ import { AppConfig } from "../../../../environments/environment";
 import { ElectronService } from "../../../services";
 import { SessionService } from "../../../services/session/session.service";
 import { WarcraftInstallationService } from "../../../services/warcraft/warcraft-installation.service";
-import { AddonProviderFactory } from "../../../services/addons/addon.provider.factory";
-import { MatDialog } from "@angular/material/dialog";
-import { AlertDialogComponent } from "../alert-dialog/alert-dialog.component";
-import { TranslateService } from "@ngx-translate/core";
 import { PreferenceStorageService } from "../../../services/storage/preference-storage.service";
-import { WagoAdService } from "../../../services/ads/wago-ad.service";
-import { AdPageOptions } from "wowup-lib-core";
 
 interface Tab {
   titleKey?: string;
@@ -40,34 +34,13 @@ interface Tab {
   templateUrl: "./vertical-tabs.component.html",
   styleUrls: ["./vertical-tabs.component.scss"],
 })
-export class VerticalTabsComponent implements OnInit, OnDestroy {
-  private readonly destroy$: Subject<boolean> = new Subject<boolean>();
-
-  /**
-   * The hole reserved for the ad. On the wago flavor the main process positions a native view over
-   * it, so the ad service needs to know where it is and when it goes away.
-   */
-  @ViewChild("adHost")
-  public set adHost(host: ElementRef<HTMLElement> | undefined) {
-    this._wagoAdService.setHostElement(host?.nativeElement);
-  }
-
+export class VerticalTabsComponent implements OnInit {
   public wowUpWebsiteUrl = AppConfig.wowUpWebsiteUrl;
-  public isWago = AppConfig.wago.enabled;
-  public isCurseForge = AppConfig.curseforge.enabled;
   public TAB_INDEX_ACCOUNT = TAB_INDEX_ABOUT;
   public FEATURE_ACCOUNTS_ENABLED = FEATURE_ACCOUNTS_ENABLED;
-  public adPageParams$ = new BehaviorSubject<AdPageOptions[]>([]);
   public isCollapsedSrc = new BehaviorSubject(false);
 
-  public isCollapsed$ = combineLatest([this.isCollapsedSrc, this.sessionService.adSpace$]).pipe(
-    map(([isCollapsed, adSpace]) => {
-      if (adSpace) {
-        return false;
-      }
-      return isCollapsed;
-    }),
-  );
+  public isCollapsed$ = this.isCollapsedSrc.asObservable();
 
   public isAccountSelected$ = this.sessionService.selectedHomeTab$.pipe(map((result) => result === TAB_INDEX_ABOUT));
 
@@ -140,33 +113,9 @@ export class VerticalTabsComponent implements OnInit, OnDestroy {
   public constructor(
     public electronService: ElectronService,
     public sessionService: SessionService,
-    private _dialog: MatDialog,
-    private _translateService: TranslateService,
-    private _addonProviderService: AddonProviderFactory,
     private _warcraftInstallationService: WarcraftInstallationService,
     private _preferences: PreferenceStorageService,
-    private _wagoAdService: WagoAdService,
-  ) {
-    // Only the overwolf flavor hosts its ad in an in page webview.
-    if (!this.isCurseForge) {
-      return;
-    }
-
-    this.sessionService.adSpace$.pipe(takeUntil(this.destroy$)).subscribe((enabled) => {
-      if (enabled) {
-        const providers = this._addonProviderService.getAdRequiredProviders();
-        const providerParams = providers
-          .map((provider) => provider.getAdPageParams())
-          .filter((param) => param !== undefined);
-
-        console.debug("providerParams", providerParams);
-
-        this.adPageParams$.next(providerParams);
-      } else {
-        this.adPageParams$.next([]);
-      }
-    });
-  }
+  ) {}
 
   public ngOnInit(): void {
     this._preferences
@@ -175,11 +124,6 @@ export class VerticalTabsComponent implements OnInit, OnDestroy {
         this.isCollapsedSrc.next(val === TRUE_STR);
       })
       .catch(console.error);
-  }
-
-  public ngOnDestroy(): void {
-    this.destroy$.next(true);
-    this.destroy$.unsubscribe();
   }
 
   public async toggleCollapse(): Promise<void> {
@@ -194,18 +138,5 @@ export class VerticalTabsComponent implements OnInit, OnDestroy {
 
   public onClickTab(tabIndex: number): void {
     this.sessionService.selectedHomeTab = tabIndex;
-  }
-
-  public onClickAdExplainer(): void {
-    const dialogKey = this.isCurseForge ? "AD_EXPLAINER_DIALOG_CF" : "AD_EXPLAINER_DIALOG";
-    this._dialog.open(AlertDialogComponent, {
-      minWidth: 250,
-      maxWidth: 400,
-      disableClose: true,
-      data: {
-        title: this._translateService.instant(`ADS.${dialogKey}.TITLE`),
-        message: this._translateService.instant(`ADS.${dialogKey}.MESSAGE`),
-      },
-    });
   }
 }

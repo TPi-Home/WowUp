@@ -13,7 +13,6 @@ import {
   AddonSearchResultDependency,
   AddonSearchResultFile,
   AddonWarningType,
-  AdPageOptions,
   DownloadAuth,
   GetAllBatchResult,
   GetAllResult,
@@ -110,7 +109,6 @@ export class CurseAddonProvider extends AddonProvider {
   public readonly canBatchFetch = true;
   public readonly allowEdit = true;
 
-  public adRequired = true;
   public enabled = true;
 
   public constructor(
@@ -487,12 +485,6 @@ export class CurseAddonProvider extends AddonProvider {
     }
 
     return "";
-  }
-
-  public override getAdPageParams(): AdPageOptions {
-    return {
-      pageUrl: "",
-    };
   }
 
   public override getDownloadAuth(): Promise<DownloadAuth | undefined> {

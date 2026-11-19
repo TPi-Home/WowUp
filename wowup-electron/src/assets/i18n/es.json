@@ -371,7 +371,7 @@
       },
       "TITLE": "Configuración de permisos de WowUp",
       "WAGO": {
-        "DESCRIPTION": "¿Activar el proveedor de addons Wago.io? Esto hará que se muestre un anuncio requerido para usar el servicio.\n¡Dicha publicidad beneficia directamente a los autores tus addons favoritos!",
+        "DESCRIPTION": "El proveedor de addons Wago.io requiere una clave de acceso de Wago. Introdúcela en los ajustes de addons.",
         "TOGGLE_LABEL": "Activar Wago.io como proveedor"
       }
     },
@@ -553,7 +553,7 @@
         },
         "TITLE": "Addons",
         "WAGO_ACCESS_KEY": {
-          "MESSAGE": "Utilice el proveedor Wago sin ver anuncios. <a href=\"https://addons.wago.io/patreon\">Saber más</a>",
+          "MESSAGE": "Introduce tu clave de acceso personal para usar el proveedor Wago. <a href=\"https://addons.wago.io/patreon\">Saber más</a>",
           "PLACEHOLDER": "Clave de acceso",
           "TITLE": "Clave de acceso de Wago"
         }

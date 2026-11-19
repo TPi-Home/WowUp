@@ -371,7 +371,7 @@
       },
       "TITLE": "WowUp Permissions Setup",
       "WAGO": {
-        "DESCRIPTION": "Enable the Wago.io addon provider to help support the authors of your favorite addons! This will display a promotional panel required to use their service.\nBy opting in you agree to their <a appExternalLink href=\"{termsUrl}\" >Terms of Service</a>.",
+        "DESCRIPTION": "The Wago.io addon provider requires a Wago Access Key. Enter your key in Addon settings.\nBy opting in you agree to their <a appExternalLink href=\"{termsUrl}\" >Terms of Service</a>.",
         "TOGGLE_LABEL": "Enable Wago.io Provider"
       }
     },
@@ -553,7 +553,7 @@
         },
         "TITLE": "Addons",
         "WAGO_ACCESS_KEY": {
-          "MESSAGE": "Use the Wago provider without seeing advertisements. <a href=\"https://addons.wago.io/patreon\">Learn More</a>",
+          "MESSAGE": "Enter your personal access key to use the Wago provider. <a href=\"https://addons.wago.io/patreon\">Learn More</a>",
           "PLACEHOLDER": "Access Key",
           "TITLE": "Wago Access Key"
         }

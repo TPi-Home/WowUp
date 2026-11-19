@@ -13,7 +13,6 @@ import { ConsentDialogComponent } from "../components/common/consent-dialog/cons
 import { ExternalUrlConfirmationDialogComponent } from "../components/common/external-url-confirmation-dialog/external-url-confirmation-dialog.component";
 import { ProgressButtonComponent } from "../components/common/progress-button/progress-button.component";
 import { TelemetryDialogComponent } from "../components/common/telemetry-dialog/telemetry-dialog.component";
-import { WebViewComponent } from "../components/common/webview/webview.component";
 import { ProgressSpinnerComponent } from "../components/progress-spinner/progress-spinner.component";
 import { MatModule } from "./mat-module";
 import { PipesModule } from "./pipes.module";
@@ -33,7 +32,6 @@ import { ProgressBarComponent } from "../components/common/progress-bar/progress
     CellWrapTextComponent,
     CenteredSnackbarComponent,
     ClientSelectorComponent,
-    WebViewComponent,
   ],
   imports: [CommonModule, FormsModule, TranslateModule, MatModule, PipesModule, ReactiveFormsModule],
   exports: [
@@ -49,7 +47,6 @@ import { ProgressBarComponent } from "../components/common/progress-bar/progress
     CellWrapTextComponent,
     CenteredSnackbarComponent,
     ClientSelectorComponent,
-    WebViewComponent,
   ],
 })
 export class CommonUiModule {}

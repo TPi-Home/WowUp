@@ -371,7 +371,7 @@
       },
       "TITLE": "WowUp 权限设置",
       "WAGO": {
-        "DESCRIPTION": "启用 Wago.io 插件安装源。启用此选项将会显示一个广告，以支持你喜欢的插件的作者。",
+        "DESCRIPTION": "Wago.io 插件源需要 Wago 访问密钥。请在插件设置中输入密钥。",
         "TOGGLE_LABEL": "启用 Wago.io 安装源"
       }
     },
@@ -553,7 +553,7 @@
         },
         "TITLE": "插件",
         "WAGO_ACCESS_KEY": {
-          "MESSAGE": "启用 Wago 安装源而无需显示广告。<a href=\"https://addons.wago.io/patreon\">了解详细信息（英语）</a>",
+          "MESSAGE": "请输入个人访问密钥以使用 Wago 插件源。 <a href=\"https://addons.wago.io/patreon\">了解详细信息（英语）</a>",
           "PLACEHOLDER": "访问密钥",
           "TITLE": "Wago 访问密钥"
         }
