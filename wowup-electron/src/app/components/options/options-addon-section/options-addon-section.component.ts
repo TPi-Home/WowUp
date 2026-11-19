@@ -26,14 +26,11 @@ import {
 } from "../../../../common/constants";
 import { AddonProviderState } from "../../../models/wowup/addon-provider-state";
 import { AddonProviderFactory } from "../../../services/addons/addon.provider.factory";
-import { WagoAdService } from "../../../services/ads/wago-ad.service";
 import { DialogFactory } from "../../../services/dialog/dialog.factory";
-import { SessionService } from "../../../services/session/session.service";
 import { SensitiveStorageService } from "../../../services/storage/sensitive-storage.service";
 import { AppConfig } from "../../../../environments/environment";
 
 interface AddonProviderStateModel extends AddonProviderState {
-  adRequired: boolean;
   providerNote?: string;
 }
 
@@ -61,8 +58,6 @@ export class OptionsAddonSectionComponent implements OnInit, OnDestroy {
     private _sensitiveStorageService: SensitiveStorageService,
     private _translateService: TranslateService,
     private _dialogFactory: DialogFactory,
-    private _wagoAdService: WagoAdService,
-    public sessionService: SessionService,
   ) {
     this._addonProviderService.addonProviderChange$.subscribe(() => {
       this.loadProviderStates();
@@ -83,7 +78,7 @@ export class OptionsAddonSectionComponent implements OnInit, OnDestroy {
             );
           }
           if (typeof ch?.wagoAccessToken === "string") {
-            tasks.push(from(this.onWagoAccessTokenChange(ch.wagoAccessToken)));
+            tasks.push(from(this._sensitiveStorageService.setAsync(PREF_WAGO_ACCESS_KEY, ch.wagoAccessToken)));
           }
           return zip(tasks);
         }),
@@ -103,12 +98,6 @@ export class OptionsAddonSectionComponent implements OnInit, OnDestroy {
   public ngOnDestroy(): void {
     this.destroy$.next(true);
     this.destroy$.unsubscribe();
-  }
-
-  public onClickManageWagoAdConsent(evt: MouseEvent): void {
-    evt.preventDefault();
-
-    this._wagoAdService.resurfaceCmp().catch((e) => console.error("onClickManageWagoAdConsent failed", e));
   }
 
   public async onProviderStateSelectionChange(event: MatSelectionListChange): Promise<void> {
@@ -173,23 +162,9 @@ export class OptionsAddonSectionComponent implements OnInit, OnDestroy {
         throw new Error("loadProviderStates got undefined provider");
       }
 
-      return { ...state, adRequired: provider.adRequired, providerNote: provider.providerNote };
+      return { ...state, providerNote: provider.providerNote };
     });
 
     this.addonProviderStates$.next(providerStateModels);
-  }
-
-  private async onWagoAccessTokenChange(accessToken: string | undefined) {
-    await this._sensitiveStorageService.setAsync(PREF_WAGO_ACCESS_KEY, accessToken);
-
-    const wago = this._addonProviderService.getProvider(ADDON_PROVIDER_WAGO);
-    if (wago === undefined) {
-      console.warn("onWagoAccessTokenChange failed to find wago provider");
-      return;
-    }
-
-    wago.adRequired = accessToken === undefined || accessToken.length <= 20;
-
-    await this._addonProviderService.setProviderEnabled(ADDON_PROVIDER_WAGO, wago.enabled);
   }
 }

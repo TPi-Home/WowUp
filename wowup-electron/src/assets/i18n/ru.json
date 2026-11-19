@@ -371,7 +371,7 @@
       },
       "TITLE": "Установка разрешений для WowUp",
       "WAGO": {
-        "DESCRIPTION": "Включение источника модификаций Wago.io будет отображать рекламу, необходимую для использования их сервиса.\nРеклама приносит прямую прибыль авторам Ваших любимых модификаций!",
+        "DESCRIPTION": "Для использования Wago.io нужен ключ доступа Wago. Введите его в настройках дополнений.",
         "TOGGLE_LABEL": "Включить источник Wago.io"
       }
     },
@@ -553,7 +553,7 @@
         },
         "TITLE": "Модификации",
         "WAGO_ACCESS_KEY": {
-          "MESSAGE": "Use the Wago provider without seeing advertisements. <a href=\"https://addons.wago.io/patreon\">Learn More</a>",
+          "MESSAGE": "Введите личный ключ доступа, чтобы использовать Wago. <a href=\"https://addons.wago.io/patreon\">Learn More</a>",
           "PLACEHOLDER": "Access Key",
           "TITLE": "Wago Access Key"
         }

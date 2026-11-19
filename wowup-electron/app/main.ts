@@ -40,7 +40,6 @@ import {
 import { AppOptions } from "../src/common/wowup/models";
 import { createAppMenu } from "./app-menu";
 import { appUpdater } from "./app-updater";
-import { wagoHandler } from "./wago-handler";
 import { initializeIpcHandlers, setPendingOpenUrl } from "./ipc-events";
 import * as platform from "./platform";
 import { initializeDefaultPreferences, getInstallId } from "./preferences";
@@ -314,7 +313,6 @@ function createWindow(): BrowserWindow {
         `--base-bg-color=${getBackgroundColor()}`,
         `--install-id=${getInstallId()}`,
       ],
-      webviewTag: true,
     },
     show: false,
   };
@@ -342,10 +340,6 @@ function createWindow(): BrowserWindow {
   initializeStoreIpcHandlers();
   registerControllers({ window: win, addonStore: getAddonStore(), preferenceStore: getPreferenceStore() });
 
-  if (AppEnv.buildFlavor === "wago") {
-    wagoHandler.initialize(win);
-  }
-
   pushEvents.on(PUSH_NOTIFICATION_EVENT, (data) => {
     win?.webContents.send(IPC_PUSH_NOTIFICATION, data);
   });
@@ -360,47 +354,6 @@ function createWindow(): BrowserWindow {
 
   win.webContents.userAgent = USER_AGENT;
   win.webContents.setAudioMuted(true);
-
-  win.webContents.on("will-attach-webview", (evt, webPreferences) => {
-    log.debug("will-attach-webview");
-
-    webPreferences.additionalArguments = [`--log-path=${LOG_PATH}`];
-    webPreferences.contextIsolation = true;
-    webPreferences.plugins = false;
-    webPreferences.webgl = false;
-  });
-
-  win.webContents.on("did-attach-webview", (evt, webContents) => {
-    webContents.session.setUserAgent(webContents.userAgent);
-
-    webContents.on("preload-error", (evt, path, e) => {
-      log.error("[webview] preload-error", e.message);
-    });
-
-    webContents.on("did-fail-provisional-load", (evt) => {
-      log.error("[webview] did-fail-provisional-load", evt);
-    });
-
-    webContents.session.setPermissionRequestHandler((contents, permission, callback) => {
-      log.warn("[webview] setPermissionRequestHandler", permission);
-      return callback(false);
-    });
-
-    webContents.session.setPermissionCheckHandler((contents, permission) => {
-      if (["background-sync"].includes(permission)) {
-        return true;
-      }
-      return false;
-    });
-
-    // webview allowpopups must be enabled for any link to work
-    // https://www.electronjs.org/docs/latest/api/webview-tag#allowpopups
-    webContents.setWindowOpenHandler((details) => {
-      log.debug("[webview] setWindowOpenHandler");
-      win?.webContents.send("webview-new-window", details); // forward this new window to the app for processing
-      return { action: "deny" };
-    });
-  });
 
   win.webContents.on("zoom-changed", (zoomDirection) => {
     win?.webContents?.send("zoom-changed", zoomDirection);

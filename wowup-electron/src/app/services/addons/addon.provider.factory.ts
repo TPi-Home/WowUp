@@ -6,7 +6,6 @@ import { RaiderIoAddonProvider } from "../../addon-providers/raiderio-provider";
 import { ZipAddonProvider } from "../../addon-providers/zip-provider";
 import { WowUpCompanionAddonProvider } from "../../addon-providers/wowup-companion-addon-provider";
 import { CachingService } from "../caching/caching-service";
-import { ElectronService } from "../electron/electron.service";
 import { WowUpService } from "../wowup/wowup.service";
 import { NetworkService } from "../network/network.service";
 import { FileService } from "../files/file.service";
@@ -17,7 +16,6 @@ import { ADDON_PROVIDER_UNKNOWN, WAGO_PROMPT_KEY } from "../../../common/constan
 import { Subject } from "rxjs";
 import { PreferenceStorageService } from "../storage/preference-storage.service";
 import { SensitiveStorageService } from "../storage/sensitive-storage.service";
-import { UiMessageService } from "../ui-message/ui-message.service";
 import { CurseAddonProvider } from "../../addon-providers/curse-addon-provider";
 import { WowUpAddonProvider, WowInterfaceAddonProvider, TukUiAddonProvider } from "wowup-lib-core";
 import { AppConfig } from "../../../environments/environment";
@@ -40,7 +38,6 @@ export class AddonProviderFactory {
 
   public constructor(
     private _cachingService: CachingService,
-    private _electronService: ElectronService,
     private _httpClient: HttpClient,
     private _wowupService: WowUpService,
     private _networkService: NetworkService,
@@ -50,7 +47,6 @@ export class AddonProviderFactory {
 
     private _preferenceStorageService: PreferenceStorageService,
     private _sensitiveStorageService: SensitiveStorageService,
-    private _uiMessageService: UiMessageService,
   ) {
     this._wowupNetworkInterface = new GenericNetworkInterface(
       this._networkService.getCircuitBreaker(
@@ -143,11 +139,9 @@ export class AddonProviderFactory {
 
   public createWagoAddonProvider(): WagoAddonProvider {
     return new WagoAddonProvider(
-      this._electronService,
       this._cachingService,
       this._warcraftService,
       this._tocService,
-      this._uiMessageService,
       this._sensitiveStorageService,
       this._networkService,
     );
@@ -241,18 +235,6 @@ export class AddonProviderFactory {
 
     this._providerMap.forEach((ap) => {
       if (ap.enabled && !ap.canBatchFetch) {
-        providers.push(ap);
-      }
-    });
-
-    return providers;
-  }
-
-  public getAdRequiredProviders(): AddonProvider[] {
-    const providers: AddonProvider[] = [];
-
-    this._providerMap.forEach((ap) => {
-      if (ap.enabled && ap.adRequired) {
         providers.push(ap);
       }
     });

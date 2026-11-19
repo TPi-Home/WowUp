@@ -13,7 +13,6 @@ import { WtfExplorerComponent } from "../components/options/wtf-explorer/wtf-exp
 import { MatModule } from "./mat-module";
 import { PipesModule } from "./pipes.module";
 import { DirectiveModule } from "./directive.module";
-import { OptionsCurseforgeSectionComponent } from "../components/options/options-curseforge-section/options-curseforge-section.component";
 
 @NgModule({
   declarations: [
@@ -23,25 +22,15 @@ import { OptionsCurseforgeSectionComponent } from "../components/options/options
     OptionsAppSectionComponent,
     OptionsDebugSectionComponent,
     OptionsWowSectionComponent,
-    OptionsCurseforgeSectionComponent,
     WowClientOptionsComponent,
   ],
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    TranslateModule,
-    MatModule,
-    PipesModule,
-    DirectiveModule,
-  ],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, TranslateModule, MatModule, PipesModule, DirectiveModule],
   exports: [
     WtfExplorerComponent,
     AboutComponent,
     OptionsAddonSectionComponent,
     OptionsAppSectionComponent,
     OptionsDebugSectionComponent,
-    OptionsCurseforgeSectionComponent,
     OptionsWowSectionComponent,
     WowClientOptionsComponent,
   ],

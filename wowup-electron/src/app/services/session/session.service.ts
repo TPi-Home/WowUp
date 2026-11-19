@@ -10,7 +10,6 @@ import { ColumnState } from "../../models/wowup/column-state";
 import { map, switchMap } from "rxjs/operators";
 import { WowUpAccountService } from "../wowup/wowup-account.service";
 import { AddonService } from "../addons/addon.service";
-import { AddonProviderFactory } from "../addons/addon.provider.factory";
 import { WowUpService } from "../wowup/wowup.service";
 import { WowInstallation } from "wowup-lib-core";
 
@@ -27,7 +26,6 @@ export class SessionService {
   private readonly _myAddonsColumnsSrc = new BehaviorSubject<ColumnState[]>([]);
   private readonly _targetFileInstallCompleteSrc = new Subject<boolean>();
   private readonly _myAddonsCompactVersionSrc = new BehaviorSubject<boolean>(false);
-  private readonly _adSpaceSrc = new BehaviorSubject<boolean>(false);
   private readonly _enableControlsSrc = new BehaviorSubject<boolean>(false);
   private readonly _getAddonsColumnsSrc = new Subject<ColumnState>();
   private readonly _currentThemeSrc = new BehaviorSubject<string>("default-theme");
@@ -49,7 +47,6 @@ export class SessionService {
   public readonly wowUpAccount$ = this._wowUpAccountService.wowUpAccountSrc.asObservable();
   public readonly wowUpAccountPushEnabled$ = this._wowUpAccountService.accountPushSrc.asObservable();
   public readonly myAddonsCompactVersion$ = this._myAddonsCompactVersionSrc.asObservable();
-  public readonly adSpace$ = this._adSpaceSrc.asObservable(); // TODO this should be driven by the enabled providers
   public readonly enableControls$ = combineLatest([this._enableControlsSrc, this._addonService.syncing$]).pipe(
     map(([enable, syncing]) => enable && !syncing),
   );
@@ -62,7 +59,6 @@ export class SessionService {
     this._addonService.syncing$,
     this._addonService.installing$,
   ]).pipe(map(([enable, syncing, installing]) => (enable || installing) && !syncing));
-  public readonly debugAdFrame$ = new Subject<boolean>();
   public readonly currentTheme$ = this._currentThemeSrc.asObservable();
   public readonly rescanComplete$ = this._rescanCompleteSrc.asObservable();
 
@@ -78,7 +74,6 @@ export class SessionService {
     private _wowUpAccountService: WowUpAccountService,
     private _wowUpService: WowUpService,
     private _addonService: AddonService,
-    private _addonProviderService: AddonProviderFactory,
   ) {
     this._preferenceStorageService
       .getObjectAsync<DetailsTabType>(SELECTED_DETAILS_TAB_KEY)
@@ -103,17 +98,6 @@ export class SessionService {
         this._currentThemeSrc.next(theme);
       })
       .catch(console.error);
-
-    this._addonProviderService.addonProviderChange$.subscribe(() => {
-      this.updateAdSpace();
-    });
-
-    this.updateAdSpace();
-  }
-
-  private updateAdSpace() {
-    const allProviders = this._addonProviderService.getEnabledAddonProviders();
-    this._adSpaceSrc.next(allProviders.findIndex((p) => p.adRequired) !== -1);
   }
 
   public get wowUpAuthToken(): string {

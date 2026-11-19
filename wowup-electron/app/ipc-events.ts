@@ -73,8 +73,6 @@ import {
   IPC_PUSH_SUBSCRIBE,
   IPC_WINDOW_IS_FULLSCREEN,
   IPC_WINDOW_IS_MAXIMIZED,
-  IPC_OW_IS_CMP_REQUIRED,
-  IPC_OW_OPEN_CMP,
   ZOOM_FACTOR_KEY,
 } from "../src/common/constants";
 
@@ -221,25 +219,6 @@ export function initializeIpcHandlers(window: BrowserWindow): void {
     log.info(`[CreateDirectory] '${directoryPath}'`);
     await fsp.mkdir(directoryPath, { recursive: true });
     return true;
-  });
-
-  handle(IPC_OW_IS_CMP_REQUIRED, async (): Promise<boolean> => {
-    // NOTE(twolf): Next version of the ow-electron will fix the types
-    try {
-      return await (app as any).overwolf.isCMPRequired();
-    } catch (e) {
-      console.error("IPC_OW_IS_CMP_REQUIRED failed", e);
-      return false;
-    }
-  });
-
-  handle(IPC_OW_OPEN_CMP, (evt, cmpTab?: string) => {
-    const options = {} as any;
-    if (cmpTab) {
-      options.tab = cmpTab;
-    }
-
-    (app as any).overwolf.openCMPWindow(options);
   });
 
   handle(IPC_GET_ZOOM_FACTOR, () => {

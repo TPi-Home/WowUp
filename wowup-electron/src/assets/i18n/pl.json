@@ -371,7 +371,7 @@
       },
       "TITLE": "WowUp Konfiguracja uprawnień",
       "WAGO": {
-        "DESCRIPTION": "Włącz dostawcę addonu Wago.io aby pomóc twórcom twojego ulubionego addonu! Spowoduje to wyświetlenie panelu promocyjnego wymaganego do korzystania z ich usług.\nDecydując się na udział w programie wyrażasz zgodę na ich <a appExternalLink href=\"{termsUrl}\" >Warunki świadczenia usług</a>.",
+        "DESCRIPTION": "Dostawca dodatków Wago.io wymaga klucza dostępu Wago. Wpisz go w ustawieniach dodatków.\nDecydując się na udział w programie wyrażasz zgodę na ich <a appExternalLink href=\"{termsUrl}\" >Warunki świadczenia usług</a>.",
         "TOGGLE_LABEL": "Włącz dostawcę Wago.io"
       }
     },
@@ -553,7 +553,7 @@
         },
         "TITLE": "Addony",
         "WAGO_ACCESS_KEY": {
-          "MESSAGE": "Use the Wago provider without seeing advertisements. <a href=\"https://addons.wago.io/patreon\">Learn More</a>",
+          "MESSAGE": "Wpisz osobisty klucz dostępu, aby korzystać z dostawcy Wago. <a href=\"https://addons.wago.io/patreon\">Learn More</a>",
           "PLACEHOLDER": "Access Key",
           "TITLE": "Wago Access Key"
         }
